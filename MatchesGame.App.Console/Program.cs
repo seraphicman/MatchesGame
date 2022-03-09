@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MatchesGame.App.Console
 {
-    using System.Net;
-
     using MatchesGame.Business;
     using MatchesGame.Business.IBusiness;
 
@@ -15,7 +9,7 @@ namespace MatchesGame.App.Console
 
     internal class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             Console.WriteLine("游戏规则介绍：");
             Console.WriteLine("将15根牙签分成三行，每行自上而下（其实方向不限）分别是3、5、7根");
@@ -35,8 +29,7 @@ namespace MatchesGame.App.Console
                     while (!confirmed)
                     {
                         var chooseSuccess = false;
-                        string errorStr;
-
+                        string errorMsg;
                         while (!chooseSuccess)
                         {
                             Console.WriteLine();
@@ -45,11 +38,11 @@ namespace MatchesGame.App.Console
                             var line = Program.GetInputNumber($"请输入玩家{game.CurrentPlayer()}选择的行号：");
                             var count = Program.GetInputNumber($"请输入玩家{game.CurrentPlayer()}选择的牙签数量：");
 
-                            chooseSuccess = game.Choose(line, count, out errorStr);
+                            chooseSuccess = game.Choose(line, count, out errorMsg);
 
                             if (!chooseSuccess)
                             {
-                                Console.WriteLine("选择失败，请重新选择。失败原因：{0}", errorStr);
+                                Console.WriteLine("选择失败，请重新选择。失败原因：{0}", errorMsg);
                             }
                         }
 
@@ -59,9 +52,9 @@ namespace MatchesGame.App.Console
 
                         if (confirmStr?.ToLower() == "y")
                         {
-                            if (!game.Confirm(out errorStr))
+                            if (!game.Confirm(out errorMsg))
                             {
-                                Console.WriteLine("确认失败，请继续选择。失败原因：{0}", errorStr);
+                                Console.WriteLine("确认失败，请继续选择。失败原因：{0}", errorMsg);
                                 continue;
                             }
 
@@ -69,7 +62,10 @@ namespace MatchesGame.App.Console
                         }
                         else
                         {
-                            game.Reset();
+                            if (!game.Reset(out errorMsg))
+                            {
+                                Console.WriteLine("重置失败，请继续选择。失败原因：{0}", errorMsg);
+                            }
                         }
                     }
                 }

@@ -94,6 +94,10 @@ namespace MatchesGame.Test
             Assert.IsTrue(game.Choose(1, 1, out errorMsg));
             Assert.AreEqual(0, game.CurrentState()[0]);
             Assert.IsFalse(game.Choose(2, 1, out errorMsg));
+
+            Assert.IsTrue(game.Confirm(out errorMsg));
+            Assert.IsTrue(game.GameOver());
+            Assert.IsFalse(game.Choose(1, 1, out errorMsg));
         }
 
         [TestMethod]
@@ -123,6 +127,8 @@ namespace MatchesGame.Test
             Assert.IsTrue(game.Confirm(out errorMsg));
             Assert.IsTrue(game.GameOver());
             Assert.AreEqual(1, game.Winner());
+
+            Assert.IsFalse(game.Confirm(out errorMsg));
         }
 
         [TestMethod]
@@ -133,16 +139,20 @@ namespace MatchesGame.Test
 
             Assert.IsTrue(game.Choose(1, 2, out errorMsg));
             Assert.AreEqual(0, game.CurrentState()[0]);
-            game.Reset();
+            game.Reset(out errorMsg);
             Assert.AreEqual(2, game.CurrentState()[0]);
 
             Assert.IsTrue(game.Choose(1, 2, out errorMsg));
             Assert.IsTrue(game.Confirm(out errorMsg));
             Assert.IsTrue(game.Choose(2, 2, out errorMsg));
             Assert.AreEqual(0, game.CurrentState()[1]);
-            game.Reset();
+            game.Reset(out errorMsg);
             Assert.AreEqual(2, game.CurrentState()[1]);
 
+            Assert.IsTrue(game.Choose(2, 1, out errorMsg));
+            Assert.IsTrue(game.Confirm(out errorMsg));
+            Assert.IsTrue(game.GameOver());
+            Assert.IsFalse(game.Reset(out errorMsg));
         }
     }
 }

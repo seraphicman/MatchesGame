@@ -38,6 +38,12 @@ namespace MatchesGame.Business
         {
             errorMsg = string.Empty;
 
+            if (this.GameOver())
+            {
+                errorMsg = $"游戏已结束，胜利者为：{this.Winner()}";
+                return false;
+            }
+
             if (line <= 0 || line > this.currentState.Length)
             {
                 errorMsg = $"行号需要在[1~{this.currentState.Length}]之间（您选择行号为：{line}）";
@@ -73,6 +79,12 @@ namespace MatchesGame.Business
         {
             errorMsg = string.Empty;
 
+            if (this.GameOver())
+            {
+                errorMsg = $"游戏已结束，胜利者为：{this.Winner()}";
+                return false;
+            }
+
             // 未做任何选择，不可以确认
             if (this.currentLine == 0)
             {
@@ -96,9 +108,19 @@ namespace MatchesGame.Business
             return true;
         }
 
-        public void Reset()
+        public bool Reset(out string errorMsg)
         {
+            errorMsg = string.Empty;
+            
+            if (this.GameOver())
+            {
+                errorMsg = $"游戏已结束，胜利者为：{this.Winner()}";
+                return false;
+            }
+
             Array.Copy(this.originalState, this.currentState, this.currentState.Length);
+
+            return true;
         }
 
         public bool GameOver()

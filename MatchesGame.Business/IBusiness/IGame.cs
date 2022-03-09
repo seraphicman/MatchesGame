@@ -22,9 +22,11 @@
         bool Confirm(out string errorMsg);
 
         /// <summary>
-        /// Reset Choose Status
+        /// 重置游戏状态
         /// </summary>
-        void Reset();
+        /// <param name="errorMsg">错误信息</param>
+        /// <returns>选择是否成功</returns>
+        bool Reset(out string errorMsg);
 
         /// <summary>
         /// 游戏是否结束
